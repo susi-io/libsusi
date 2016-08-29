@@ -25,32 +25,21 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
 set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall --std=c++11" )
 
 file( GLOB SUSICPP_SRCFILES ${CMAKE_CURRENT_SOURCE_DIR}/sources/TCPClient.cpp
-                   ${CMAKE_CURRENT_SOURCE_DIR}/sources/SSLClient.cpp
-                   ${CMAKE_CURRENT_SOURCE_DIR}/sources/SusiClient.cpp
-                   ${CMAKE_CURRENT_SOURCE_DIR}/sources/EventManager.cpp)
-
-file( GLOB SUSICOMMON_SRCFILES ${CMAKE_CURRENT_SOURCE_DIR}sources/JSONFramer.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/sources/LineFramer.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/sources/base64.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/sources/sha3.cpp )
-
-
-add_library( susi-common SHARED ${SUSICOMMON_SRCFILES})
-target_link_libraries( susi-common
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${Boost_LIBRARIES}
-    bson)
+                  ${CMAKE_CURRENT_SOURCE_DIR}/sources/SSLClient.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/sources/SusiClient.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/sources/EventManager.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/sources/LineFramer.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/sources/base64.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/sources/sha3.cpp )
 
 add_library( susi SHARED ${SUSICPP_SRCFILES})
 target_link_libraries( susi
     ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_LIBRARIES}
     ${OPENSSL_LIBRARIES}
-    bson
-    susi-common)
+    bson)
 
 install(TARGETS susi LIBRARY DESTINATION "/usr/local/lib")
-install(TARGETS susi-common LIBRARY DESTINATION "/usr/local/lib")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION /usr/local/include)
 
 set(CPACK_GENERATOR "DEB")
