@@ -14,9 +14,13 @@
 
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-project(susi-cpp)
+project(libsusi)
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/headers )
+find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system program_options)
+
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
 
 set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall --std=c++11" )
 
@@ -37,22 +41,23 @@ target_link_libraries( susi-common
     ${Boost_LIBRARIES}
     bson)
 
-add_library( ${PROJECT_NAME} SHARED ${SUSICPP_SRCFILES})
-target_link_libraries( ${PROJECT_NAME}
+add_library( susi SHARED ${SUSICPP_SRCFILES})
+target_link_libraries( susi
     ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     bson
     susi-common)
 
-add_executable( ${PROJECT_NAME}_test ${CMAKE_CURRENT_SOURCE_DIR}/test.cpp)
-target_link_libraries(${PROJECT_NAME}_test
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${Boost_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
-    bson
-    ${PROJECT_NAME})
-
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "/usr/local/lib")
+install(TARGETS susi LIBRARY DESTINATION "/usr/local/lib")
 install(TARGETS susi-common LIBRARY DESTINATION "/usr/local/lib")
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/headers/ DESTINATION /usr/local/include)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION /usr/local/include)
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_SET_DESTDIR ON)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Tino Rusch")
+set(CPACK_PACKAGE_VERSION "0.2.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "2")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+include(CPack)
