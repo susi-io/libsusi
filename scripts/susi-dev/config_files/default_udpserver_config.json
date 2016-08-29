@@ -1,9 +1,0 @@
-{
-    "susi-addr": "localhost",
-    "susi-port": 4000,
-    "cert": "/etc/susi/keys/susi-udpserver_cert.pem",
-    "key": "/etc/susi/keys/susi-udpserver_key.pem",
-    "component": {
-        "port": 4001
-    }
-}
